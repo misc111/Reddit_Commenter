@@ -30,8 +30,21 @@ def get_comment_chain(url):
     # Build the conversation chain
     conversation = []
 
+    # Add the original post first
+    post_author = post_data['author']
+    post_title = post_data['title']
+    post_body = post_data.get('selftext', '')
+
+    if post_body:
+        conversation.append(f"REDDIT POST:\n{post_author}: {post_title}\n\n{post_body}")
+    else:
+        conversation.append(f"REDDIT POST:\n{post_author}: {post_title}")
+
+    # Add comment section header
+    conversation.append("COMMENT SECTION:")
+
     def extract_chain(comment_list):
-        """Extract the linear comment chain (parent to child)."""
+        """Extract the linear comment chain (parent to child) - no children."""
         for item in comment_list:
             if item['kind'] == 't1':  # t1 is a comment
                 comment = item['data']
@@ -40,9 +53,10 @@ def get_comment_chain(url):
 
                 conversation.append(f"{author}: {body}")
 
-                # Continue down the chain
+                # Continue down the chain (only the direct parent chain, not siblings)
                 if 'replies' in comment and comment['replies']:
                     extract_chain(comment['replies']['data']['children'])
+                    break  # Only follow the first reply chain (the linked comment path)
 
     extract_chain(comments_data)
 
