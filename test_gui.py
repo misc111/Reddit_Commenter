@@ -30,23 +30,25 @@ import reddit_gui
 test_complete = False
 
 def auto_click():
-    """Click button after short delay."""
+    """Set clipboard and trigger focus event."""
     time.sleep(0.3)
     print("\n=== Testing GUI ===")
-    # Insert test URL
+    # Set clipboard with test URL
     test_url = "https://www.reddit.com/r/science/comments/1nu94z4/comment/nh05i30/"
-    reddit_gui.entry.insert(0, test_url)
-    print(f"Entry value: {reddit_gui.entry.get()}")
-    print("Clicking button...")
-    reddit_gui.button.invoke()
+    reddit_gui.root.clipboard_clear()
+    reddit_gui.root.clipboard_append(test_url)
+    print(f"Clipboard set to: {test_url}")
+    print("Triggering focus event...")
+    reddit_gui.root.event_generate('<FocusIn>')
 
 def check_result():
     """Check if test completed."""
     time.sleep(5)
     global test_complete
     test_complete = True
-    print(f"\nFinal status: {reddit_gui.status_label.cget('text')}")
-    if "Successfully" in reddit_gui.status_label.cget('text'):
+    status_text = reddit_gui.status_label.cget('text')
+    print(f"\nFinal status: {status_text}")
+    if "Success" in status_text:
         print("\n=== TEST PASSED ===")
     else:
         print("\n=== TEST FAILED ===")
