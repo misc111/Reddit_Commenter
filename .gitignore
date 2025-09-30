@@ -19,3 +19,6 @@ venv/
 
 # Log files
 *.log
+
+# Configuration files
+*config.ini
