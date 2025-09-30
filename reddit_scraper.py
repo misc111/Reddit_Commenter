@@ -4,6 +4,9 @@ import pyperclip
 # Input: Reddit comment link
 COMMENT_URL = "https://www.reddit.com/r/science/comments/1nu94z4/comment/nh05i30/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button"
 
+# Test with a link post (uncomment to test)
+# COMMENT_URL = "https://www.reddit.com/r/technology/comments/1ftgvrz/comment/lppm3im/"
+
 
 def get_comment_chain(url):
     """Scrape the comment chain from Reddit and return formatted text."""
@@ -34,11 +37,19 @@ def get_comment_chain(url):
     post_author = post_data['author']
     post_title = post_data['title']
     post_body = post_data.get('selftext', '')
+    post_url = post_data.get('url', '')
+
+    # Build post content
+    post_content = f"REDDIT POST:\n{post_author}: {post_title}"
 
     if post_body:
-        conversation.append(f"REDDIT POST:\n{post_author}: {post_title}\n\n{post_body}")
-    else:
-        conversation.append(f"REDDIT POST:\n{post_author}: {post_title}")
+        post_content += f"\n\n{post_body}"
+
+    # Add link if it exists and it's an external link (not reddit comments page)
+    if post_url and '/comments/' not in post_url:
+        post_content += f"\n\nLink: {post_url}"
+
+    conversation.append(post_content)
 
     # Add comment section header
     conversation.append("COMMENT SECTION:")
@@ -71,9 +82,13 @@ if __name__ == "__main__":
         # Print truncated test output
         print("=== CONVERSATION PREVIEW ===\n")
         for i, comment in enumerate(conversation[:10]):  # Show first 10 comments
-            # Truncate long comments
-            truncated = comment if len(comment) <= 100 else comment[:97] + "..."
+            # Truncate long comments for display, but show more for the post
+            if i == 0:  # First item is the post, show more to include link
+                truncated = comment if len(comment) <= 500 else comment[:497] + "..."
+            else:
+                truncated = comment if len(comment) <= 100 else comment[:97] + "..."
             print(truncated)
+            print()  # Add blank line between items
 
         if len(conversation) > 10:
             print(f"\n... ({len(conversation) - 10} more comments)")
