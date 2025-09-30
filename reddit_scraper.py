@@ -2,7 +2,7 @@ import requests
 import pyperclip
 
 # Input: Reddit comment link
-COMMENT_URL = "https://www.reddit.com/r/science/comments/1nu94z4/comment/nh05i30/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button"
+COMMENT_URL = "https://www.reddit.com/r/science/comments/1nu94z4/comment/ngzdh3r/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button"
 
 # Test with a link post (uncomment to test)
 # COMMENT_URL = "https://www.reddit.com/r/technology/comments/1ftgvrz/comment/lppm3im/"
