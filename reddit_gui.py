@@ -66,8 +66,8 @@ def handle_paste(event=None):
         success_msg = f"✓ Success! Last comment:\n\n{display_text}"
         status_label.config(text=success_msg, fg="green", wraplength=350)
 
-        # Enable the Gemini button
-        gemini_button.config(state="normal", bg="#001f3f", fg="white")
+        # Enable the Gemini button with vibrant Gemini blue
+        gemini_button.config(state="normal", bg="#1a73e8", fg="white")
 
         return "break"  # Prevent default paste behavior
 
@@ -134,12 +134,25 @@ root = tk.Tk()
 root.title("Reddit Comment Scraper")
 root.geometry("400x280")
 root.resizable(False, False)
+root.config(bg="#1e1e1e")
 
 # Create and pack widgets
-title_label = tk.Label(root, text="Reddit Comment Chain Scraper", font=("Arial", 14, "bold"))
-title_label.pack(pady=15)
+title_label = tk.Label(
+    root,
+    text="Reddit Comment Chain Scraper",
+    font=("Arial", 14, "bold"),
+    bg="#1e1e1e",
+    fg="#ffffff"
+)
+title_label.pack(pady=(20, 10))
 
-instruction_label = tk.Label(root, text="Press ⌘+V to paste Reddit comment URL", font=("Arial", 11), fg="#555")
+instruction_label = tk.Label(
+    root,
+    text="Press ⌘+V to paste Reddit comment URL",
+    font=("Arial", 11),
+    bg="#1e1e1e",
+    fg="#cccccc"
+)
 instruction_label.pack(pady=5)
 
 # Dunk Mode checkbox
@@ -148,7 +161,12 @@ dunk_mode_checkbox = tk.Checkbutton(
     root,
     text="Dunk Mode 🏀",
     variable=dunk_mode_var,
-    font=("Arial", 10)
+    font=("Arial", 10),
+    bg="#1e1e1e",
+    fg="#ffffff",
+    selectcolor="#2d2d2d",
+    activebackground="#1e1e1e",
+    activeforeground="#ffffff"
 )
 dunk_mode_checkbox.pack(pady=10)
 
@@ -160,7 +178,7 @@ gemini_button = tk.Button(
     font=("Arial", 11, "bold"),
     bg="#666666",
     fg="#999999",
-    activebackground="#003366",
+    activebackground="#1557b0",
     activeforeground="white",
     relief="flat",
     borderwidth=0,
@@ -169,11 +187,19 @@ gemini_button = tk.Button(
     cursor="hand2",
     state="disabled"
 )
-gemini_button.pack(pady=10)
+gemini_button.pack(pady=15)
 
 # Status label that shows results
-status_label = tk.Label(root, text="Ready - paste URL with ⌘+V", font=("Arial", 10), fg="gray", wraplength=350, justify="left")
-status_label.pack(pady=15, padx=20)
+status_label = tk.Label(
+    root,
+    text="Ready - paste URL with ⌘+V",
+    font=("Arial", 12),
+    bg="#1e1e1e",
+    fg="#888888",
+    wraplength=350,
+    justify="left"
+)
+status_label.pack(pady=(15, 20), padx=20)
 
 # Bind CMD+V (Mac) and CTRL+V (Windows/Linux) to handle paste
 root.bind('<Command-v>', handle_paste)
