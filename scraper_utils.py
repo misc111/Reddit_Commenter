@@ -12,6 +12,14 @@ def load_llm_prompt():
 def get_comment_chain(url):
     """Scrape the comment chain from Reddit and return formatted text."""
 
+    # Extract comment ID from URL
+    # URL format: .../comment/COMMENT_ID/...
+    target_comment_id = None
+    if '/comment/' in url:
+        parts = url.split('/comment/')
+        if len(parts) > 1:
+            target_comment_id = parts[1].split('/')[0].split('?')[0]
+
     # Add ?context=10000 to get full parent chain
     base_url = url.split('?')[0]
     json_url = base_url + '.json?context=10000'
@@ -59,9 +67,12 @@ def get_comment_chain(url):
     # Add comment section header
     conversation.append("COMMENT SECTION:")
 
+    # Flag to stop extraction once we hit the target comment
+    found_target = [False]
+
     def extract_chain(comment_list, depth=0):
-        """Extract the full comment chain including all replies."""
-        if depth > 50:  # Safety check to prevent infinite recursion
+        """Extract parent chain up to and including the linked comment."""
+        if depth > 50 or found_target[0]:  # Stop if we found target or hit depth limit
             return
 
         for item in comment_list:
@@ -69,13 +80,19 @@ def get_comment_chain(url):
                 continue
 
             comment = item['data']
+            comment_id = comment['id']
             author = comment['author']
             body = comment['body']
 
             # Add this comment
             conversation.append(f"{author}: {body}")
 
-            # Follow replies to get the full chain
+            # Check if this is the target comment
+            if target_comment_id and comment_id == target_comment_id:
+                found_target[0] = True
+                return
+
+            # Follow replies to continue the chain
             replies = comment.get('replies')
             if replies and isinstance(replies, dict) and 'data' in replies:
                 children = replies['data'].get('children', [])

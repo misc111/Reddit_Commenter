@@ -6,7 +6,7 @@ import os
 
 # First test the core function
 print("=== Testing core function first ===")
-from reddit_gui import get_comment_chain
+from scraper_utils import get_comment_chain
 
 url = "https://www.reddit.com/r/science/comments/1nu94z4/comment/nh05i30/"
 print(f"URL: {url}")
