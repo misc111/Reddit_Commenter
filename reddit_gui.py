@@ -157,12 +157,18 @@ gemini_button = tk.Button(
     root,
     text="Open in Gemini 💎",
     command=open_gemini,
-    font=("Arial", 10),
-    bg="#4285F4",
+    font=("Arial", 11, "bold"),
+    bg="#001f3f",
     fg="white",
+    activebackground="#003366",
+    activeforeground="white",
+    relief="flat",
+    borderwidth=0,
     padx=20,
     pady=8,
-    state="disabled"
+    cursor="hand2",
+    state="disabled",
+    disabledforeground="#999999"
 )
 gemini_button.pack(pady=10)
 
