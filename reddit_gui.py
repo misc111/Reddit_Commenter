@@ -188,6 +188,20 @@ mode_var = tk.StringVar(value="standard")
 mode_frame = tk.Frame(root, bg="#1e1e1e")
 mode_frame.pack(pady=10)
 
+agree_radio = tk.Radiobutton(
+    mode_frame,
+    text="Agree ✅",
+    variable=mode_var,
+    value="agree",
+    font=("Arial", 10),
+    bg="#1e1e1e",
+    fg="#ffffff",
+    selectcolor="#2d2d2d",
+    activebackground="#1e1e1e",
+    activeforeground="#ffffff"
+)
+agree_radio.pack(side="left", padx=5)
+
 friendly_radio = tk.Radiobutton(
     mode_frame,
     text="Friendly 🤝",

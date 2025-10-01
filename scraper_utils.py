@@ -6,11 +6,35 @@ def load_llm_prompt(mode="standard"):
     """Load the LLM prompt from the text file and adjust for the selected mode.
 
     Args:
-        mode: One of "friendly", "standard", or "dunk"
+        mode: One of "friendly", "standard", "dunk", or "agree"
     """
     prompt_path = os.path.join(os.path.dirname(__file__), 'llm_prompt.txt')
     with open(prompt_path, 'r') as f:
         prompt = f.read()
+
+    # Default replacements shared across modes
+    stance_instruction = "Take a politically conservative stance on the issue being argued. You're here to disagree and present a counter-perspective."
+    tone_instruction = "STANDARD MODE: Be direct, fact-based, and to the point - think Ben Shapiro style. Present your conservative perspective with clarity and confidence. You're not here to be friendly, but you're also not overtly aggressive. State facts, make logical arguments, and directly challenge flawed reasoning. Use a matter-of-fact tone that says 'here's why you're wrong' without being unnecessarily combative. Be assertive and unapologetic about your position, but let the facts do the heavy lifting rather than personal attacks."
+    mode_specific_guidance = ""
+    length_requirement = "LENGTH MATCHING IS MANDATORY: Your final comment MUST be approximately the same length as the comment you're responding to (the last comment in the chain). You may be 1-2 sentences longer, but NO MORE. This is about matching the effort level of the person you're responding to."
+    phase2_requirements = (
+        "Show your strategic thinking:\n"
+        "- Analyze the opponent's last comment in detail\n"
+        "- Identify their main claims, assumptions, and logical structure\n"
+        "- Assess the strength of their argument and potential weaknesses\n"
+        "- Consider how your research findings (if applicable) or logical reasoning can effectively counter their points\n"
+        "- EXPLICITLY WRITE OUT your strategic analysis before moving to the next phase"
+    )
+    phase3_requirements = (
+        "Show your counter-response predictions:\n"
+        "- Identify ALL possible counter-responses the opponent might make to your reply\n"
+        "- Assign probability weights (%) to EACH potential counter-response\n"
+        "- List them out explicitly (e.g., \"Response A: 40%, Response B: 30%, Response C: 20%, Response D: 10%\")\n"
+        "- Explain which high-probability responses you will preemptively address and HOW\n"
+        "- SHOW ALL OF THIS ANALYSIS in your response before moving to the next phase"
+    )
+    phase4_length_target = "Set your target length: approximately the same length, or at most 1-2 sentences longer"
+    phase4_counter_guidance = "- Explain how you'll preemptively address the most likely counter-responses in each draft"
 
     # Replace placeholders based on mode
     if mode == "friendly":
@@ -19,12 +43,40 @@ def load_llm_prompt(mode="standard"):
     elif mode == "dunk":
         stance_instruction = "Take a politically conservative stance on the issue being argued. Your goal is to completely dismantle the opposing position."
         tone_instruction = "DUNK MODE ACTIVATED: Be ruthless, cutting, and mercilessly critical. Call out weak reasoning, expose logical fallacies by name, and demolish their argument piece by piece. Use sharp, incisive language that leaves no room for their position. Be unapologetically aggressive while staying factually grounded. The goal is to completely dismantle their argument and make them regret engaging. This is a debate, and you're here to win decisively."
-    else:  # standard mode
-        stance_instruction = "Take a politically conservative stance on the issue being argued. You're here to disagree and present a counter-perspective."
-        tone_instruction = "STANDARD MODE: Be direct, fact-based, and to the point - think Ben Shapiro style. Present your conservative perspective with clarity and confidence. You're not here to be friendly, but you're also not overtly aggressive. State facts, make logical arguments, and directly challenge flawed reasoning. Use a matter-of-fact tone that says 'here's why you're wrong' without being unnecessarily combative. Be assertive and unapologetic about your position, but let the facts do the heavy lifting rather than personal attacks."
+    elif mode == "agree":
+        stance_instruction = (
+            "AGREE MODE: You are aligned with the final commenter. Reinforce their core points, add supporting context, and strengthen their position without undermining it."
+        )
+        tone_instruction = (
+            "AGREE MODE TONE: Be encouraging, confident, and collaborative. Sound like a thoughtful ally who appreciates the original point and is eager to build on it with useful detail or personal insight."
+        )
+        mode_specific_guidance = (
+            "AGREE MODE DIRECTIVE: This is not a debate. Focus on amplifying and enhancing the final comment rather than arguing against anyone."
+        )
+        length_requirement = (
+            "LENGTH FLEXIBILITY: Aim to match the length of the comment you're supporting, but you may go up to roughly 150% of its length if needed to add meaningful reinforcement or context."
+        )
+        phase2_requirements = (
+            "Agree mode is collaborative, so no strategic takedown is needed. Provide a brief note such as \"Strategic Analysis: N/A - Agree mode (reinforcing, not debating).\""
+        )
+        phase3_requirements = (
+            "Agree mode does not require anticipating counter-responses. Provide a note such as \"Counter-Response Prediction: N/A - Agree mode.\""
+        )
+        phase4_length_target = (
+            "Set your target length to roughly match the original comment, with permission to go up to about 150% if that's helpful for reinforcement"
+        )
+        phase4_counter_guidance = (
+            "- Instead of counter-response planning, explain how each draft will reinforce and expand on the original comment while keeping the supportive tone consistent"
+        )
 
     prompt = prompt.replace('{{STANCE}}', stance_instruction)
     prompt = prompt.replace('{{TONE}}', tone_instruction)
+    prompt = prompt.replace('{{MODE_SPECIFIC_GUIDANCE}}', mode_specific_guidance)
+    prompt = prompt.replace('{{LENGTH_REQUIREMENT}}', length_requirement)
+    prompt = prompt.replace('{{PHASE2_REQUIREMENTS}}', phase2_requirements)
+    prompt = prompt.replace('{{PHASE3_REQUIREMENTS}}', phase3_requirements)
+    prompt = prompt.replace('{{PHASE4_LENGTH_TARGET}}', phase4_length_target)
+    prompt = prompt.replace('{{PHASE4_COUNTER_GUIDANCE}}', phase4_counter_guidance)
     return prompt
 
 
@@ -33,7 +85,7 @@ def get_comment_chain(url, mode="standard"):
 
     Args:
         url: Reddit comment URL
-        mode: One of "friendly", "standard", or "dunk"
+        mode: One of "friendly", "standard", "dunk", or "agree"
     """
 
     # Extract comment ID from URL
