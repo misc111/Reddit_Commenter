@@ -67,7 +67,7 @@ def handle_paste(event=None):
         status_label.config(text=success_msg, fg="green", wraplength=350)
 
         # Enable the Gemini button
-        gemini_button.config(state="normal")
+        gemini_button.config(state="normal", bg="#001f3f", fg="white")
 
         return "break"  # Prevent default paste behavior
 
@@ -158,8 +158,8 @@ gemini_button = tk.Button(
     text="Open in Gemini 💎",
     command=open_gemini,
     font=("Arial", 11, "bold"),
-    bg="#001f3f",
-    fg="white",
+    bg="#666666",
+    fg="#999999",
     activebackground="#003366",
     activeforeground="white",
     relief="flat",
@@ -167,8 +167,7 @@ gemini_button = tk.Button(
     padx=20,
     pady=8,
     cursor="hand2",
-    state="disabled",
-    disabledforeground="#999999"
+    state="disabled"
 )
 gemini_button.pack(pady=10)
 
