@@ -60,7 +60,7 @@ def get_comment_chain(url):
     conversation.append("COMMENT SECTION:")
 
     def extract_chain(comment_list, depth=0):
-        """Extract the linear comment chain (parent to linked comment only) - no children."""
+        """Extract the full comment chain including all replies."""
         if depth > 50:  # Safety check to prevent infinite recursion
             return
 
@@ -75,7 +75,7 @@ def get_comment_chain(url):
             # Add this comment
             conversation.append(f"{author}: {body}")
 
-            # Check if there are replies to continue the chain
+            # Follow replies to get the full chain
             replies = comment.get('replies')
             if replies and isinstance(replies, dict) and 'data' in replies:
                 children = replies['data'].get('children', [])
