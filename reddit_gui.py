@@ -1,6 +1,8 @@
 import tkinter as tk
 import pyperclip
 import subprocess
+
+from modes import DEFAULT_MODE, MODE_UI_ORDER
 from scraper_utils import get_comment_chain
 
 
@@ -183,66 +185,28 @@ instruction_label = tk.Label(
 instruction_label.pack(pady=5)
 
 # Mode selection with radio buttons
-mode_var = tk.StringVar(value="standard")
+mode_var = tk.StringVar(value=DEFAULT_MODE.value)
 
 mode_frame = tk.Frame(root, bg="#1e1e1e")
 mode_frame.pack(pady=10)
 
-agree_radio = tk.Radiobutton(
-    mode_frame,
-    text="Agree ✅",
-    variable=mode_var,
-    value="agree",
-    font=("Arial", 10),
-    bg="#1e1e1e",
-    fg="#ffffff",
-    selectcolor="#2d2d2d",
-    activebackground="#1e1e1e",
-    activeforeground="#ffffff"
-)
-agree_radio.pack(side="left", padx=5)
-
-friendly_radio = tk.Radiobutton(
-    mode_frame,
-    text="Friendly 🤝",
-    variable=mode_var,
-    value="friendly",
-    font=("Arial", 10),
-    bg="#1e1e1e",
-    fg="#ffffff",
-    selectcolor="#2d2d2d",
-    activebackground="#1e1e1e",
-    activeforeground="#ffffff"
-)
-friendly_radio.pack(side="left", padx=5)
-
-standard_radio = tk.Radiobutton(
-    mode_frame,
-    text="Standard 💼",
-    variable=mode_var,
-    value="standard",
-    font=("Arial", 10),
-    bg="#1e1e1e",
-    fg="#ffffff",
-    selectcolor="#2d2d2d",
-    activebackground="#1e1e1e",
-    activeforeground="#ffffff"
-)
-standard_radio.pack(side="left", padx=5)
-
-dunk_radio = tk.Radiobutton(
-    mode_frame,
-    text="Dunk 🏀",
-    variable=mode_var,
-    value="dunk",
-    font=("Arial", 10),
-    bg="#1e1e1e",
-    fg="#ffffff",
-    selectcolor="#2d2d2d",
-    activebackground="#1e1e1e",
-    activeforeground="#ffffff"
-)
-dunk_radio.pack(side="left", padx=5)
+# Keep references alive mainly for future customisation (tooltips, styling).
+mode_buttons = []
+for mode in MODE_UI_ORDER:
+    button = tk.Radiobutton(
+        mode_frame,
+        text=mode.ui_label,
+        variable=mode_var,
+        value=mode.value,
+        font=("Arial", 10),
+        bg="#1e1e1e",
+        fg="#ffffff",
+        selectcolor="#2d2d2d",
+        activebackground="#1e1e1e",
+        activeforeground="#ffffff"
+    )
+    button.pack(side="left", padx=5)
+    mode_buttons.append(button)
 
 # Open in Gemini button (disabled by default)
 gemini_button = tk.Button(
