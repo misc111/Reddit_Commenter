@@ -1,10 +1,16 @@
 import tkinter as tk
 import pyperclip
+import subprocess
 from scraper_utils import get_comment_chain
+
+
+# Store the processed conversation globally
+last_conversation = None
 
 
 def handle_paste(event=None):
     """Handle CMD+V paste event and process the URL from clipboard."""
+    global last_conversation
     try:
         # Get URL from clipboard
         url = root.clipboard_get().strip()
@@ -30,6 +36,7 @@ def handle_paste(event=None):
 
         # Get the comment chain
         conversation = get_comment_chain(url, dunk_mode=dunk_mode)
+        last_conversation = conversation  # Store for later use
         full_text = '\n\n'.join(conversation)
 
         # Print preview
@@ -59,6 +66,9 @@ def handle_paste(event=None):
         success_msg = f"✓ Success! Last comment:\n\n{display_text}"
         status_label.config(text=success_msg, fg="green", wraplength=350)
 
+        # Enable the Gemini button
+        gemini_button.config(state="normal")
+
         return "break"  # Prevent default paste behavior
 
     except tk.TclError:
@@ -72,10 +82,57 @@ def handle_paste(event=None):
         return "break"
 
 
+def open_gemini():
+    """Open Safari, navigate to Gemini, and paste the conversation."""
+    global last_conversation
+
+    if not last_conversation:
+        status_label.config(text="No conversation to send to Gemini", fg="orange", wraplength=350)
+        return
+
+    try:
+        # Copy conversation to clipboard for pasting
+        full_text = '\n\n'.join(last_conversation)
+        pyperclip.copy(full_text)
+
+        # AppleScript to open Safari, create new tab, navigate to Gemini, and paste
+        applescript = '''
+        tell application "Safari"
+            activate
+            if (count of windows) = 0 then
+                make new document
+            else
+                tell front window
+                    set current tab to (make new tab)
+                end tell
+            end if
+            delay 0.5
+            set URL of front document to "https://gemini.google.com"
+            delay 2
+        end tell
+
+        tell application "System Events"
+            tell process "Safari"
+                keystroke "v" using command down
+            end tell
+        end tell
+        '''
+
+        subprocess.run(['osascript', '-e', applescript], check=True)
+        print("✓ Opened Gemini in Safari and pasted conversation")
+        status_label.config(text="✓ Opened Gemini in Safari", fg="blue", wraplength=350)
+
+    except Exception as e:
+        print(f"ERROR opening Gemini: {e}")
+        import traceback
+        traceback.print_exc()
+        status_label.config(text=f"✗ Error opening Gemini: {str(e)}", fg="red", wraplength=350)
+
+
 # Create the main window
 root = tk.Tk()
 root.title("Reddit Comment Scraper")
-root.geometry("400x230")
+root.geometry("400x280")
 root.resizable(False, False)
 
 # Create and pack widgets
@@ -94,6 +151,20 @@ dunk_mode_checkbox = tk.Checkbutton(
     font=("Arial", 10)
 )
 dunk_mode_checkbox.pack(pady=10)
+
+# Open in Gemini button (disabled by default)
+gemini_button = tk.Button(
+    root,
+    text="Open in Gemini 💎",
+    command=open_gemini,
+    font=("Arial", 10),
+    bg="#4285F4",
+    fg="white",
+    padx=20,
+    pady=8,
+    state="disabled"
+)
+gemini_button.pack(pady=10)
 
 # Status label that shows results
 status_label = tk.Label(root, text="Ready - paste URL with ⌘+V", font=("Arial", 10), fg="gray", wraplength=350, justify="left")
