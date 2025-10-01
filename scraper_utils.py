@@ -2,24 +2,39 @@ import requests
 import os
 
 
-def load_llm_prompt(dunk_mode=False):
-    """Load the LLM prompt from the text file and adjust for dunk mode."""
+def load_llm_prompt(mode="standard"):
+    """Load the LLM prompt from the text file and adjust for the selected mode.
+
+    Args:
+        mode: One of "friendly", "standard", or "dunk"
+    """
     prompt_path = os.path.join(os.path.dirname(__file__), 'llm_prompt.txt')
     with open(prompt_path, 'r') as f:
         prompt = f.read()
 
-    # Replace the {{DUNK_MODE}} placeholder with the appropriate instruction
-    if dunk_mode:
-        tone_instruction = "DUNK MODE ACTIVATED: Make your tone highly adversarial, sharp, and assertive. Directly challenge weak arguments, call out logical fallacies, and be unapologetically critical. The goal is to decisively counter their position while maintaining factual accuracy."
-    else:
-        tone_instruction = "Use a conversational, measured tone. Be firm in your arguments but not overly aggressive. Focus on presenting your perspective clearly without being needlessly combative."
+    # Replace placeholders based on mode
+    if mode == "friendly":
+        stance_instruction = "Take the most objective, well-reasoned position on the topic, regardless of whether it strictly aligns with conservative ideology. Your goal is to find common ground and contribute meaningfully to the discussion."
+        tone_instruction = "FRIENDLY MODE: Use a warm, thoughtful, and genuinely respectful tone. You're here to share insights and engage in meaningful dialogue. Be personable and open-minded - like you're having a conversation with a friend over coffee. Focus on understanding their perspective while offering your own thoughtful take. Use phrases like 'That's an interesting point,' 'I can see where you're coming from,' 'Here's how I think about it,' or 'What if we considered...' Avoid any hint of confrontation or debate."
+    elif mode == "dunk":
+        stance_instruction = "Take a politically conservative stance on the issue being argued. Your goal is to completely dismantle the opposing position."
+        tone_instruction = "DUNK MODE ACTIVATED: Be ruthless, cutting, and mercilessly critical. Call out weak reasoning, expose logical fallacies by name, and demolish their argument piece by piece. Use sharp, incisive language that leaves no room for their position. Be unapologetically aggressive while staying factually grounded. The goal is to completely dismantle their argument and make them regret engaging. This is a debate, and you're here to win decisively."
+    else:  # standard mode
+        stance_instruction = "Take a politically conservative stance on the issue being argued. You're here to disagree and present a counter-perspective."
+        tone_instruction = "STANDARD MODE: Be direct, fact-based, and to the point - think Ben Shapiro style. Present your conservative perspective with clarity and confidence. You're not here to be friendly, but you're also not overtly aggressive. State facts, make logical arguments, and directly challenge flawed reasoning. Use a matter-of-fact tone that says 'here's why you're wrong' without being unnecessarily combative. Be assertive and unapologetic about your position, but let the facts do the heavy lifting rather than personal attacks."
 
-    prompt = prompt.replace('{{DUNK_MODE}}', tone_instruction)
+    prompt = prompt.replace('{{STANCE}}', stance_instruction)
+    prompt = prompt.replace('{{TONE}}', tone_instruction)
     return prompt
 
 
-def get_comment_chain(url, dunk_mode=False):
-    """Scrape the comment chain from Reddit and return formatted text."""
+def get_comment_chain(url, mode="standard"):
+    """Scrape the comment chain from Reddit and return formatted text.
+
+    Args:
+        url: Reddit comment URL
+        mode: One of "friendly", "standard", or "dunk"
+    """
 
     # Extract comment ID from URL
     # URL format: .../comment/COMMENT_ID/...
@@ -52,7 +67,7 @@ def get_comment_chain(url, dunk_mode=False):
     conversation = []
 
     # Add LLM instructions at the top
-    instructions = load_llm_prompt(dunk_mode=dunk_mode)
+    instructions = load_llm_prompt(mode=mode)
     conversation.append(instructions)
 
     # Add the original post first

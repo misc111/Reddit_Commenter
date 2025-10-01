@@ -4,13 +4,14 @@ import subprocess
 from scraper_utils import get_comment_chain
 
 
-# Store the processed conversation globally
+# Store the processed conversation and URL globally
 last_conversation = None
+last_url = None
 
 
 def handle_paste(event=None):
     """Handle CMD+V paste event and process the URL from clipboard."""
-    global last_conversation
+    global last_conversation, last_url
     try:
         # Get URL from clipboard
         url = root.clipboard_get().strip()
@@ -30,12 +31,15 @@ def handle_paste(event=None):
         root.update()
         print("Fetching comment chain...")
 
-        # Get dunk mode state
-        dunk_mode = dunk_mode_var.get()
-        print(f"Dunk Mode: {'ON' if dunk_mode else 'OFF'}")
+        # Store the URL for later mode changes
+        last_url = url
+
+        # Get selected mode
+        mode = mode_var.get()
+        print(f"Mode: {mode}")
 
         # Get the comment chain
-        conversation = get_comment_chain(url, dunk_mode=dunk_mode)
+        conversation = get_comment_chain(url, mode=mode)
         last_conversation = conversation  # Store for later use
         full_text = '\n\n'.join(conversation)
 
@@ -82,6 +86,26 @@ def handle_paste(event=None):
         return "break"
 
 
+def regenerate_conversation():
+    """Regenerate the conversation with the current mode selection."""
+    global last_conversation, last_url
+
+    if not last_url:
+        return
+
+    mode = mode_var.get()
+    print(f"\n=== REGENERATING with mode: {mode} ===")
+
+    # Regenerate conversation with new mode
+    conversation = get_comment_chain(last_url, mode=mode)
+    last_conversation = conversation
+
+    # Update clipboard
+    full_text = '\n\n'.join(conversation)
+    pyperclip.copy(full_text)
+    print(f"✓ Regenerated and copied to clipboard with {mode} mode")
+
+
 def open_gemini():
     """Open Safari, navigate to Gemini, and paste the conversation."""
     global last_conversation
@@ -91,6 +115,9 @@ def open_gemini():
         return
 
     try:
+        # Regenerate conversation with current mode before opening Gemini
+        regenerate_conversation()
+
         # Copy conversation to clipboard for pasting
         full_text = '\n\n'.join(last_conversation)
         pyperclip.copy(full_text)
@@ -155,12 +182,17 @@ instruction_label = tk.Label(
 )
 instruction_label.pack(pady=5)
 
-# Dunk Mode checkbox
-dunk_mode_var = tk.BooleanVar(value=False)
-dunk_mode_checkbox = tk.Checkbutton(
-    root,
-    text="Dunk Mode 🏀",
-    variable=dunk_mode_var,
+# Mode selection with radio buttons
+mode_var = tk.StringVar(value="standard")
+
+mode_frame = tk.Frame(root, bg="#1e1e1e")
+mode_frame.pack(pady=10)
+
+friendly_radio = tk.Radiobutton(
+    mode_frame,
+    text="Friendly 🤝",
+    variable=mode_var,
+    value="friendly",
     font=("Arial", 10),
     bg="#1e1e1e",
     fg="#ffffff",
@@ -168,7 +200,35 @@ dunk_mode_checkbox = tk.Checkbutton(
     activebackground="#1e1e1e",
     activeforeground="#ffffff"
 )
-dunk_mode_checkbox.pack(pady=10)
+friendly_radio.pack(side="left", padx=5)
+
+standard_radio = tk.Radiobutton(
+    mode_frame,
+    text="Standard 💼",
+    variable=mode_var,
+    value="standard",
+    font=("Arial", 10),
+    bg="#1e1e1e",
+    fg="#ffffff",
+    selectcolor="#2d2d2d",
+    activebackground="#1e1e1e",
+    activeforeground="#ffffff"
+)
+standard_radio.pack(side="left", padx=5)
+
+dunk_radio = tk.Radiobutton(
+    mode_frame,
+    text="Dunk 🏀",
+    variable=mode_var,
+    value="dunk",
+    font=("Arial", 10),
+    bg="#1e1e1e",
+    fg="#ffffff",
+    selectcolor="#2d2d2d",
+    activebackground="#1e1e1e",
+    activeforeground="#ffffff"
+)
+dunk_radio.pack(side="left", padx=5)
 
 # Open in Gemini button (disabled by default)
 gemini_button = tk.Button(
