@@ -46,21 +46,36 @@ PHASE 4: COMMENT COMPOSITION
 Explain your composition strategy:
 - FIRST: Count the approximate length of the comment you're responding to (character count or word count)
 - Set your target length: approximately the same length, or at most 1-2 sentences longer
-- Describe how you'll craft the comment using the research findings and strategic analysis
-- Explain how you'll preemptively address the most likely counter-responses
-- Describe your approach to making it sound natural and human-like
-- Explain how you'll keep it concise to match the target length
-- SHOW YOUR COMPOSITION STRATEGY before writing the actual comment
+- Describe how you'll craft THREE different comment drafts using the research findings and strategic analysis
+- Each draft should approach the rebuttal from a different angle or emphasis
+- Explain how you'll preemptively address the most likely counter-responses in each draft
+- Describe your approach to making them sound natural and human-like
+- Explain how you'll keep each draft concise to match the target length
+- SHOW YOUR COMPOSITION STRATEGY before writing the actual comments
 
-PHASE 5: FINAL DELIVERABLE
-Rules for the Python code block:
-- Present your final comment in a Python code block (```python)
+PHASE 5: FINAL DELIVERABLES
+Create THREE different comment drafts:
+
+DRAFT 1: Present your first comment approach in a Python code block (```python)
 - ABSOLUTELY NO CITATIONS, source links, brackets with numbers [1], [2], or any references of any kind inside the Python code block
 - ABSOLUTELY NO "Sources:" section inside the Python code block
 - The Python code block contains ONLY the raw comment text that will be posted to Reddit
 - The final comment must read exactly like a natural Reddit comment from a human user with zero indication of research sources
-- After the Python code block (OUTSIDE of it), you may include a separate "Research Sources Used" section listing the URLs you referenced
-- If Spanish: also provide English translation in a separate Python code block (also with no citations inside)
+
+DRAFT 2: Present your second comment approach in a Python code block (```python)
+- Same rules as Draft 1
+- Different angle or emphasis than Draft 1
+
+DRAFT 3: Present your third comment approach in a Python code block (```python)
+- Same rules as Draft 1
+- Different angle or emphasis than Drafts 1 and 2
+
+After all three drafts (OUTSIDE of the code blocks), you may include a separate "Research Sources Used" section listing the URLs you referenced.
+
+If Spanish: provide English translations of all three drafts in separate Python code blocks (also with no citations inside)
+
+TONE ADJUSTMENT:
+{{DUNK_MODE}}
 
 Generate a reply to the last comment in the chain below.
 

@@ -2,14 +2,23 @@ import requests
 import os
 
 
-def load_llm_prompt():
-    """Load the LLM prompt from the text file."""
+def load_llm_prompt(dunk_mode=False):
+    """Load the LLM prompt from the text file and adjust for dunk mode."""
     prompt_path = os.path.join(os.path.dirname(__file__), 'llm_prompt.txt')
     with open(prompt_path, 'r') as f:
-        return f.read()
+        prompt = f.read()
+
+    # Replace the {{DUNK_MODE}} placeholder with the appropriate instruction
+    if dunk_mode:
+        tone_instruction = "DUNK MODE ACTIVATED: Make your tone highly adversarial, sharp, and assertive. Directly challenge weak arguments, call out logical fallacies, and be unapologetically critical. The goal is to decisively counter their position while maintaining factual accuracy."
+    else:
+        tone_instruction = "Use a conversational, measured tone. Be firm in your arguments but not overly aggressive. Focus on presenting your perspective clearly without being needlessly combative."
+
+    prompt = prompt.replace('{{DUNK_MODE}}', tone_instruction)
+    return prompt
 
 
-def get_comment_chain(url):
+def get_comment_chain(url, dunk_mode=False):
     """Scrape the comment chain from Reddit and return formatted text."""
 
     # Extract comment ID from URL
@@ -43,7 +52,7 @@ def get_comment_chain(url):
     conversation = []
 
     # Add LLM instructions at the top
-    instructions = load_llm_prompt()
+    instructions = load_llm_prompt(dunk_mode=dunk_mode)
     conversation.append(instructions)
 
     # Add the original post first
