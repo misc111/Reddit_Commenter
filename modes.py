@@ -83,7 +83,12 @@ BASE_PROMPT_CONFIG: Mapping[str, str] = {
         "State facts, make logical arguments, and directly challenge flawed reasoning. "
         "Use a matter-of-fact tone that says 'here's why you're wrong' without being "
         "unnecessarily combative. Be assertive and unapologetic about your position, "
-        "but let the facts do the heavy lifting rather than personal attacks."
+        "but let the facts do the heavy lifting rather than personal attacks. Stay "
+        "composed—never resort to insults or inflammatory labels, avoid calling their "
+        "argument 'desperate', and do not accuse them of straw-manning or deflecting "
+        "even if you believe that's happening. Focus on dismantling their claims with "
+        "evidence and reasoning, and never imply you're insulted, offended, or "
+        "pearl-clutching."
     ),
     "MODE_SPECIFIC_GUIDANCE": "",
     "LENGTH_REQUIREMENT": (
@@ -135,7 +140,9 @@ MODE_PROMPT_OVERRIDES: Mapping[Mode, Mapping[str, str]] = {
             "Focus on understanding their perspective while offering your own thoughtful "
             "take. Use phrases like 'That's an interesting point,' 'I can see where "
             "you're coming from,' 'Here's how I think about it,' or 'What if we "
-            "considered...' Avoid any hint of confrontation or debate."
+            "considered...' Avoid any hint of confrontation or debate. Keep the warmth "
+            "without sounding like you're pearl-clutching, and never imply you're insulted "
+            "or offended."
         ),
     },
     Mode.DUNK: {
@@ -149,7 +156,9 @@ MODE_PROMPT_OVERRIDES: Mapping[Mode, Mapping[str, str]] = {
             "argument piece by piece. Use sharp, incisive language that leaves no room "
             "for their position. Be unapologetically aggressive while staying factually "
             "grounded. The goal is to completely dismantle their argument and make them "
-            "regret engaging. This is a debate, and you're here to win decisively."
+            "regret engaging. This is a debate, and you're here to win decisively. Keep "
+            "the ferocity focused on their claims—never sound like you're pearl-clutching "
+            "or suggest you're insulted or offended."
         ),
     },
     Mode.AGREE: {
@@ -161,7 +170,8 @@ MODE_PROMPT_OVERRIDES: Mapping[Mode, Mapping[str, str]] = {
         "TONE": (
             "AGREE MODE TONE: Be encouraging, confident, and collaborative. Sound like a "
             "thoughtful ally who appreciates the original point and is eager to build on "
-            "it with useful detail or personal insight."
+            "it with useful detail or personal insight. Reinforce confidently without a "
+            "pearl-clutching tone, and never imply you're insulted or offended."
         ),
         "MODE_SPECIFIC_GUIDANCE": (
             "AGREE MODE DIRECTIVE: This is not a debate. Focus on amplifying and "
