@@ -72,8 +72,9 @@ def handle_paste(event=None):
         success_msg = f"✓ Success! Last comment:\n\n{display_text}"
         status_label.config(text=success_msg, fg="green", wraplength=350)
 
-        # Enable the Gemini button with vibrant Gemini blue
+        # Enable the action buttons
         gemini_button.config(state="normal", bg="#1a73e8", fg="white")
+        grok_button.config(state="normal", bg="#0068ff", fg="white")
 
         return "break"  # Prevent default paste behavior
 
@@ -158,6 +159,53 @@ def open_gemini():
         status_label.config(text=f"✗ Error opening Gemini: {str(e)}", fg="red", wraplength=350)
 
 
+def open_grok():
+    """Open Safari, navigate to Grok, and paste the conversation."""
+    global last_conversation
+
+    if not last_conversation:
+        status_label.config(text="No conversation to send to Grok", fg="orange", wraplength=350)
+        return
+
+    try:
+        regenerate_conversation()
+
+        full_text = '\n\n'.join(last_conversation)
+        pyperclip.copy(full_text)
+
+        applescript = '''
+        tell application "Safari"
+            activate
+            if (count of windows) = 0 then
+                make new document
+            else
+                tell front window
+                    set current tab to (make new tab)
+                end tell
+            end if
+            delay 0.5
+            set URL of front document to "https://grok.com"
+            delay 2
+        end tell
+
+        tell application "System Events"
+            tell process "Safari"
+                keystroke "v" using command down
+            end tell
+        end tell
+        '''
+
+        subprocess.run(['osascript', '-e', applescript], check=True)
+        print("✓ Opened Grok in Safari and pasted conversation")
+        status_label.config(text="✓ Opened Grok in Safari", fg="blue", wraplength=350)
+
+    except Exception as e:
+        print(f"ERROR opening Grok: {e}")
+        import traceback
+        traceback.print_exc()
+        status_label.config(text=f"✗ Error opening Grok: {str(e)}", fg="red", wraplength=350)
+
+
 # Create the main window
 root = tk.Tk()
 root.title("Reddit Comment Scraper")
@@ -208,7 +256,7 @@ for mode in MODE_UI_ORDER:
     button.pack(side="left", padx=5)
     mode_buttons.append(button)
 
-# Open in Gemini button (disabled by default)
+# Action buttons (disabled by default)
 gemini_button = tk.Button(
     root,
     text="Open in Gemini 💎",
@@ -225,7 +273,25 @@ gemini_button = tk.Button(
     cursor="hand2",
     state="disabled"
 )
-gemini_button.pack(pady=15)
+gemini_button.pack(pady=(15, 5))
+
+grok_button = tk.Button(
+    root,
+    text="Open in Grok 🤖",
+    command=open_grok,
+    font=("Arial", 11, "bold"),
+    bg="#666666",
+    fg="#999999",
+    activebackground="#1a73e8",
+    activeforeground="white",
+    relief="flat",
+    borderwidth=0,
+    padx=20,
+    pady=8,
+    cursor="hand2",
+    state="disabled"
+)
+grok_button.pack(pady=5)
 
 # Status label that shows results
 status_label = tk.Label(
