@@ -144,6 +144,8 @@ def open_gemini():
         tell application "System Events"
             tell process "Safari"
                 keystroke "v" using command down
+                delay 0.2
+                key code 36 -- return key to send the message
             end tell
         end tell
         '''
@@ -191,6 +193,8 @@ def open_grok():
         tell application "System Events"
             tell process "Safari"
                 keystroke "v" using command down
+                delay 0.2
+                key code 36 -- return key to send the message
             end tell
         end tell
         '''
