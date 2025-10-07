@@ -125,8 +125,29 @@ def open_gemini():
         full_text = '\n\n'.join(last_conversation)
         pyperclip.copy(full_text)
 
-        # AppleScript to open Safari, create new tab, navigate to Gemini, and paste
-        applescript = '''
+        # Build AppleScript based on auto-submit setting
+        auto_submit = auto_submit_var.get()
+
+        if auto_submit:
+            paste_and_submit = '''
+            tell application "System Events"
+                tell process "Safari"
+                    keystroke "v" using command down
+                    delay 0.2
+                    key code 36 -- return key to send the message
+                end tell
+            end tell
+            '''
+        else:
+            paste_and_submit = '''
+            tell application "System Events"
+                tell process "Safari"
+                    keystroke "v" using command down
+                end tell
+            end tell
+            '''
+
+        applescript = f'''
         tell application "Safari"
             activate
             if (count of windows) = 0 then
@@ -141,13 +162,7 @@ def open_gemini():
             delay 2
         end tell
 
-        tell application "System Events"
-            tell process "Safari"
-                keystroke "v" using command down
-                delay 0.2
-                key code 36 -- return key to send the message
-            end tell
-        end tell
+        {paste_and_submit}
         '''
 
         subprocess.run(['osascript', '-e', applescript], check=True)
@@ -175,7 +190,29 @@ def open_grok():
         full_text = '\n\n'.join(last_conversation)
         pyperclip.copy(full_text)
 
-        applescript = '''
+        # Build AppleScript based on auto-submit setting
+        auto_submit = auto_submit_var.get()
+
+        if auto_submit:
+            paste_and_submit = '''
+            tell application "System Events"
+                tell process "Safari"
+                    keystroke "v" using command down
+                    delay 0.2
+                    key code 36 -- return key to send the message
+                end tell
+            end tell
+            '''
+        else:
+            paste_and_submit = '''
+            tell application "System Events"
+                tell process "Safari"
+                    keystroke "v" using command down
+                end tell
+            end tell
+            '''
+
+        applescript = f'''
         tell application "Safari"
             activate
             if (count of windows) = 0 then
@@ -190,13 +227,7 @@ def open_grok():
             delay 2
         end tell
 
-        tell application "System Events"
-            tell process "Safari"
-                keystroke "v" using command down
-                delay 0.2
-                key code 36 -- return key to send the message
-            end tell
-        end tell
+        {paste_and_submit}
         '''
 
         subprocess.run(['osascript', '-e', applescript], check=True)
@@ -213,7 +244,7 @@ def open_grok():
 # Create the main window
 root = tk.Tk()
 root.title("Reddit Comment Scraper")
-root.geometry("400x280")
+root.geometry("400x310")
 root.resizable(False, False)
 root.config(bg="#1e1e1e")
 
@@ -241,6 +272,21 @@ mode_var = tk.StringVar(value=DEFAULT_MODE.value)
 
 mode_frame = tk.Frame(root, bg="#1e1e1e")
 mode_frame.pack(pady=10)
+
+# Auto-submit toggle
+auto_submit_var = tk.BooleanVar(value=True)
+auto_submit_checkbox = tk.Checkbutton(
+    root,
+    text="Auto-submit with Return key",
+    variable=auto_submit_var,
+    font=("Arial", 10),
+    bg="#1e1e1e",
+    fg="#cccccc",
+    selectcolor="#2d2d2d",
+    activebackground="#1e1e1e",
+    activeforeground="#ffffff"
+)
+auto_submit_checkbox.pack(pady=5)
 
 # Keep references alive mainly for future customisation (tooltips, styling).
 mode_buttons = []

@@ -65,9 +65,7 @@ PROMPT_PLACEHOLDERS = (
     "MODE_SPECIFIC_GUIDANCE",
     "LENGTH_REQUIREMENT",
     "PHASE2_REQUIREMENTS",
-    "PHASE3_REQUIREMENTS",
     "PHASE4_LENGTH_TARGET",
-    "PHASE4_COUNTER_GUIDANCE",
 )
 
 
@@ -102,30 +100,15 @@ BASE_PROMPT_CONFIG: Mapping[str, str] = {
         "the effort level of the person you're responding to."
     ),
     "PHASE2_REQUIREMENTS": (
-        "Show your strategic thinking:\n"
         "- Analyze the opponent's last comment in detail\n"
         "- Identify their main claims, assumptions, and logical structure\n"
         "- Assess the strength of their argument and potential weaknesses\n"
         "- Consider how your research findings (if applicable) or logical reasoning "
-        "can effectively counter their points\n"
-        "- EXPLICITLY WRITE OUT your strategic analysis before moving to the next phase"
-    ),
-    "PHASE3_REQUIREMENTS": (
-        "Show your counter-response predictions:\n"
-        "- Identify ALL possible counter-responses the opponent might make to your reply\n"
-        "- Assign probability weights (%) to EACH potential counter-response\n"
-        "- List them out explicitly (e.g., \"Response A: 40%, Response B: 30%, "
-        "Response C: 20%, Response D: 10%\")\n"
-        "- Explain which high-probability responses you will preemptively address and HOW\n"
-        "- SHOW ALL OF THIS ANALYSIS in your response before moving to the next phase"
+        "can effectively counter their points"
     ),
     "PHASE4_LENGTH_TARGET": (
         "Set your target length: approximately the same length, or at most 1-2 "
         "sentences longer"
-    ),
-    "PHASE4_COUNTER_GUIDANCE": (
-        "- Explain how you'll preemptively address the most likely counter-responses "
-        "in each draft"
     ),
 }
 
@@ -179,22 +162,13 @@ MODE_PROMPT_OVERRIDES: Mapping[Mode, Mapping[str, str]] = {
             "reinforcement or context."
         ),
         "PHASE2_REQUIREMENTS": (
-            "Agree mode is collaborative, so no strategic takedown is needed. Provide a "
-            "brief note such as \"Strategic Analysis: N/A - Agree mode (reinforcing, "
-            "not debating).\""
-        ),
-        "PHASE3_REQUIREMENTS": (
-            "Agree mode does not require anticipating counter-responses. Provide a note "
-            "such as \"Counter-Response Prediction: N/A - Agree mode.\""
+            "- Analyze the comment you're supporting and identify key points to amplify\n"
+            "- Consider how to add meaningful reinforcement or context\n"
+            "- Think about how to thread in Misc1's perspective while staying aligned"
         ),
         "PHASE4_LENGTH_TARGET": (
             "Set your target length to roughly match the original comment, with "
             "permission to go up to about 150% if that's helpful for reinforcement"
-        ),
-        "PHASE4_COUNTER_GUIDANCE": (
-            "- Instead of counter-response planning, explain how each draft will reinforce "
-            "and expand on the original comment while keeping the supportive tone "
-            "consistent"
         ),
     },
 }

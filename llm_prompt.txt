@@ -28,48 +28,41 @@ CRITICAL REQUIREMENTS:
 
 MANDATORY WORKFLOW - YOU MUST SHOW ALL YOUR WORK FOR EACH PHASE:
 
-PHASE 1: ASSESSMENT & PREPARATION
-Determine what type of response is needed:
-- Analyze the nature of the argument: Is it primarily factual/empirical or logical/philosophical?
-- Make a qualitative judgment about what prep work will optimize your response
-- If the argument hinges on factual claims (statistics, events, studies, etc.), conduct thorough research:
-  * Gather facts, statistics, studies, and expert opinions relevant to the topic
-  * Focus on credible, verifiable sources (academic papers, government data, reputable news outlets, expert analysis)
-  * Document all sources with full URLs for citation
-  * Identify key data points and quotes that support your perspective
-- If the argument hinges on logic, reasoning, or philosophical principles, focus on:
-  * Identifying logical fallacies, inconsistencies, or flawed reasoning
-  * Clarifying definitions, assumptions, and underlying principles
-  * Constructing sound logical arguments and thought experiments
-- Note any counterarguments or nuances that need to be addressed
-- You may perform additional research at any later phase if needed
-- SHOW YOUR ASSESSMENT AND PREPARATION in your response before moving to the next phase
+PHASE 1: ASSESSMENT & TARGET IDENTIFICATION
+- Count the approximate length of the comment you're responding to (character count or word count)
+- {{PHASE4_LENGTH_TARGET}}
+- Analyze the opponent's argument structure: Identify their main claims, assumptions, and logical flow
+- **STEELMAN their position**: Articulate the strongest, most charitable version of their argument before attacking it
+- **Identify their single weakest or most attackable claim** - this is your primary target
+- Determine response type: Is this primarily factual/empirical or logical/philosophical?
+- If factual, conduct **targeted research** focused specifically on:
+  * The weakest claim you identified
+  * Facts, statistics, studies that directly contradict or complicate their position
+  * Credible sources (academic papers, government data, expert analysis) with full URLs
+- If logical, focus on:
+  * Specific logical fallacies, inconsistencies, or flawed reasoning
+  * Definitions, assumptions, and underlying principles that need clarification
+  * Sound counterarguments and thought experiments
+- Note the top 2-3 likely counter-responses they might make to your attack
+- SHOW YOUR COMPLETE ASSESSMENT before moving to the next phase
 
 PHASE 2: STRATEGIC ANALYSIS
 {{PHASE2_REQUIREMENTS}}
+- Preemptively identify the top 2-3 most likely counter-responses they might make to your attack
+- Explain how you'll address these counter-responses in your drafts
+- SHOW YOUR COMPLETE STRATEGIC ANALYSIS before moving to the next phase
 
-PHASE 3: COUNTER-RESPONSE PREDICTION
-{{PHASE3_REQUIREMENTS}}
-
-PHASE 4: COMMENT COMPOSITION
-Explain your composition strategy:
-- FIRST: Count the approximate length of the comment you're responding to (character count or word count)
-- {{PHASE4_LENGTH_TARGET}}
-- Describe how you'll craft THREE different comment drafts using your research findings (if applicable), logical reasoning, and strategic analysis
-- Each draft should approach the response from a different angle or emphasis
-{{PHASE4_COUNTER_GUIDANCE}}
-- Describe your approach to making them sound natural and human-like
-- Explain how you'll keep each draft concise to match the target length
-- SHOW YOUR COMPOSITION STRATEGY before writing the actual comments
-
-PHASE 5: FINAL DELIVERABLES
-Create THREE different comment drafts:
+PHASE 3: DRAFT THREE DIFFERENT RESPONSES
+Create THREE different comment drafts, each approaching the response from a different angle or emphasis:
 
 DRAFT 1: Present your first comment approach in a Python code block (```python)
 - ABSOLUTELY NO CITATIONS, source links, brackets with numbers [1], [2], or any references of any kind inside the Python code block
 - ABSOLUTELY NO "Sources:" section inside the Python code block
 - The Python code block contains ONLY the raw comment text that will be posted to Reddit
-- The final comment must read exactly like a natural Reddit comment from a human user with zero indication of research sources
+- Preemptively address likely counter-responses
+- Weave research findings naturally without citations
+- Match the target length closely
+- Make it sound conversational and human-like
 
 DRAFT 2: Present your second comment approach in a Python code block (```python)
 - Same rules as Draft 1
@@ -79,11 +72,11 @@ DRAFT 3: Present your third comment approach in a Python code block (```python)
 - Same rules as Draft 1
 - Different angle or emphasis than Drafts 1 and 2
 
-After all three drafts (OUTSIDE of the code blocks), recommend which single draft should be posted and explain why.
-
-After that recommendation, you may include a separate "Research Sources Used" section listing the URLs you referenced.
-
-If Spanish: provide English translations of all three drafts in separate Python code blocks (also with no citations inside)
+PHASE 4: FINAL RECOMMENDATION
+- Compare the three drafts and recommend which single draft should be posted
+- Explain why your recommended draft is the strongest choice
+- Include a separate "Research Sources Used" section (OUTSIDE the code block) listing any URLs you referenced
+- If the post was in Spanish, provide English translations of all three drafts in separate Python code blocks (also with no citations inside)
 
 TONE ADJUSTMENT:
 {{TONE}}
