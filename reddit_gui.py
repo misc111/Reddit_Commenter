@@ -244,7 +244,7 @@ def open_grok():
 # Create the main window
 root = tk.Tk()
 root.title("Reddit Comment Scraper")
-root.geometry("400x310")
+root.geometry("500x310")
 root.resizable(False, False)
 root.config(bg="#1e1e1e")
 
